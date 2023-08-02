@@ -27,12 +27,12 @@ Windows:
 # 📖 Manual:
 
 1. Initialising nanopm:
-   - By default nanopm creates a folder .nanopm in $HOME, in which all databases (except ones passed as an argument) will be stored.
-   - If databases aren't found, nanopm will ask you to pass "-n" argument to init new database
+   - By default, nanopm creates a .nanopm folder in the $HOME directory, which will hold all databases (except those passed as an argument).
+   - If no databases are found, nanopm will ask you to pass the "-n" argument to initialize a new database.
 
-2. There are 2 different ways of selecting database in nanopm:
-   - Run nanopm with "-f" flag, and pass database to it.
-   - Select database from menu, which will be shown if nanopm detects any databases in $HOME/.nanopm
+3. There are two different ways to select a database in nanopm:
+   - Run nanopm with the "-f" flag and pass a database path as an argument.
+   - Select a database from the menu that will be shown if nanopm finds any databases in $HOME/.nanopm
 
 # 👤 Authors:
 
