@@ -23,10 +23,8 @@ jobs:
     - name: Build
       run: go build -v .
 
-    - name: Upload to Releases
-      uses: softprops/action-gh-release@v1
+    - uses: actions/upload-artifact@v3
       with:
-        files: ./nanopm
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: nanopm
+        path: nanopm
       
