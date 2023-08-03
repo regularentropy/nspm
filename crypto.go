@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"golang.org/x/crypto/pbkdf2"
@@ -28,12 +27,12 @@ func encrypt(records *[]byte, db_path *string, db_key *[]byte) {
 	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
 		fmt.Println(err)
 	}
-	_ = ioutil.WriteFile(*db_path, gcm.Seal(nonce, nonce, *records, nil), 0600)
+	_ = os.WriteFile(*db_path, gcm.Seal(nonce, nonce, *records, nil), 0600)
 }
 
 /* Decrypt function. Returns json of the encrypted database */
 func decrypt(key []byte, file string) []byte {
-	ciphertext, _ := ioutil.ReadFile(file)
+	ciphertext, _ := os.ReadFile(file)
 	c, _ := aes.NewCipher(key)
 	gcm, err := cipher.NewGCM(c)
 	nonceSize := gcm.NonceSize()
