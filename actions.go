@@ -231,8 +231,7 @@ func createNewDatabase() {
 		os.Exit(0)
 	}
 	db_key := getDerivedPassword(&db_key_plain)
-	db_path := getDatabaseFolder() + "/" + db_name
-
+	db_path := filepath.Join(getDatabaseFolder(), db_name)
 	test_rec, _ := json.Marshal(init_rec)
 	encrypt(&test_rec, &db_path, db_key)
 }
@@ -276,7 +275,8 @@ func getDatabasePath(databaseFolder string) (string, string) {
 				break
 			}
 		}
-		return files[u_index].Name(), databaseFolder + "/" + files[u_index].Name()
+		filepath := filepath.Join(databaseFolder, files[u_index].Name())
+		return files[u_index].Name(), filepath
 	}
 	return "", ""
 }
@@ -285,11 +285,10 @@ func getDatabasePath(databaseFolder string) (string, string) {
 
 /* Replacement of the default input function. Allows entering more than one word */
 func input(text string) string {
-	inputReader := bufio.NewReader(os.Stdin)
 	fmt.Print(text)
-	u_input, _ := inputReader.ReadString('\n')
-	tr_str := strings.TrimSuffix(u_input, "\n")
-	return tr_str
+	inputReader := bufio.NewReader(os.Stdin)
+	uInput, _ := inputReader.ReadString('\n')
+	return strings.TrimSpace(uInput)
 }
 
 /* Replacement for the default int input function. Checks if the user didn't enter anything and returns -1 in that case */

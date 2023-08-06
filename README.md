@@ -40,7 +40,7 @@ regularenthropy - main developer
 Contributors are welcome!
 
 # ✅ TODO
-- [ ] Add Windows support
+- [X] Add Windows support
 - [ ] Refactor codebase to look better
 - [ ] Create a better name
 
