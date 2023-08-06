@@ -14,6 +14,9 @@ nanopm is a cross-platform command line password manager written in Go.
 4. Ability to move entries between categories
 5. Ability to generate strong password for the entries
 
+# 🖥️ Screenshots:
+![image](https://github.com/regularenthropy/nanopm/assets/89523758/ace53eee-a396-4009-8eb8-1731be01e072)
+
 # 🛠️ Installation:
 Nanopm can be downloaded from releases on Github or compiled manually.
 
