@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"golang.org/x/term"
@@ -305,13 +306,18 @@ func input_int(text string) int {
 /* Function responsible for entering a password when opening a database */
 func readDatabasePassword() *[]byte {
 	fmt.Printf("Enter password: ")
-	password, _ := term.ReadPassword(0)
+	password, _ := term.ReadPassword(int(os.Stdin.Fd()))
 	return &password
 }
 
 /* Clearing screen after some action */
 func clearScreen() {
-	cmd := exec.Command("clear")
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("cmd", "/c", "cls")
+	} else { // Linux or Mac
+		cmd = exec.Command("clear")
+	}
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
