@@ -15,7 +15,9 @@ nspm is a secure, cross-platform command line password manager written in Go.
 5. Password generator for creating strong passwords for entries
 
 # 🖥️ Screenshots:
-![image](https://github.com/regularenthropy/nspm/assets/89523758/ace53eee-a396-4009-8eb8-1731be01e072)
+![image](https://github.com/regularenthropy/nanopm/assets/89523758/8dabb102-324e-4873-8d9b-4db841249817)
+
+
 
 # 🛠️ Installation:
 You can download nspm from the releases page on Github or compile it manually. To compile it manually, follow these steps:
