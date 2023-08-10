@@ -25,6 +25,6 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: nanopm
-        path: nanopm
+        name: nspm
+        path: nspm
       

@@ -6,7 +6,7 @@ func main_menu(db *[]Categories, db_name *string, db_path *string, db_key *[]byt
 	in_menu := true
 	for in_menu {
 		clearScreen()
-		fmt.Printf("nanopm v%d.%d.%d\n", major, minor, patch)
+		fmt.Printf("nspm v%d.%d.%d\n", major, minor, patch)
 		fmt.Printf("Editing [%s]\n", *db_name)
 		fmt.Printf(
 			"1.Create new category\n" +
@@ -78,13 +78,13 @@ func record_menu(rec *Record) {
 		clearScreen()
 		fmt.Printf("Editing %s\n", rec.Title)
 		fmt.Printf(
-		"1.Change title\n"+
-		"2.Change username\n"+
-		"3.Change password\n"+
-		"4.Change description\n"+
-		"5.Generate password\n"+
-		"6.List current record\n"+
-		"7.To record menu\n")
+			"1.Change title\n" +
+				"2.Change username\n" +
+				"3.Change password\n" +
+				"4.Change description\n" +
+				"5.Generate password\n" +
+				"6.List current record\n" +
+				"7.To record menu\n")
 		u_choice := input_int(": ")
 		switch u_choice {
 		case 1:

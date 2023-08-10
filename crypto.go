@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/pbkdf2"
 )
 
-/* ============= Actions used for security in nanopm ============= */
+/* ============= Actions used for security in nspm ============= */
 
 /* Encrypt function */
 func encrypt(records *[]byte, db_path *string, db_key *[]byte) {

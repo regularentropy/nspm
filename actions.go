@@ -53,13 +53,13 @@ func renameCategory(cats *[]Categories) {
 }
 
 func listCategories(cats *[]Categories) {
-    fmt.Println("Available categories:")
-    for index, c := range *cats {
-        fmt.Printf("%d : %s\n", index, c.CategoryName)
-        for _, r := range c.Records {
-            fmt.Printf("\t%s\n", r.Title)
-        }
-    }
+	fmt.Println("Available categories:")
+	for index, c := range *cats {
+		fmt.Printf("%d : %s\n", index, c.CategoryName)
+		for _, r := range c.Records {
+			fmt.Printf("\t%s\n", r.Title)
+		}
+	}
 }
 
 func removeCategory(cats *[]Categories) {
@@ -139,7 +139,7 @@ func chooseRecordIndex(recs *[]Record) int {
 /* Move the record between categories */
 func moveRecord(cats *[]Categories) {
 	clearScreen()
-    fmt.Println("Select the category to move from:")
+	fmt.Println("Select the category to move from:")
 	catIndexFrom := chooseCategoryIndex(cats)
 	if catIndexFrom < 0 || catIndexFrom >= len(*cats) {
 		return
@@ -147,7 +147,7 @@ func moveRecord(cats *[]Categories) {
 
 	sourceCategory := &(*cats)[catIndexFrom]
 	clearScreen()
-    fmt.Println("Select the record to move:")
+	fmt.Println("Select the record to move:")
 	recIndexFrom := chooseRecordIndex(&sourceCategory.Records)
 	if recIndexFrom < 0 || recIndexFrom >= len(sourceCategory.Records) {
 		return
@@ -155,7 +155,7 @@ func moveRecord(cats *[]Categories) {
 
 	selectedRec := sourceCategory.Records[recIndexFrom]
 	clearScreen()
-    fmt.Println("Select the destination category:")
+	fmt.Println("Select the destination category:")
 	catIndexTo := chooseCategoryIndex(cats)
 	if catIndexTo < 0 || catIndexTo >= len(*cats) {
 		return
@@ -168,20 +168,20 @@ func moveRecord(cats *[]Categories) {
 
 /* ============= Actions for records editing ============= */
 
-func changeRecordField(fieldName string, field *string, ) {
-    fmt.Printf("Current %s: %s\n", fieldName, *field)
-    *field = input(fmt.Sprintf("Enter new %s: ", fieldName))
+func changeRecordField(fieldName string, field *string) {
+	fmt.Printf("Current %s: %s\n", fieldName, *field)
+	*field = input(fmt.Sprintf("Enter new %s: ", fieldName))
 }
 
 func generateRecordPassword(password *string) {
-    psLength := input_int("Enter the length: ")
-    if psLength > 0 {
-        ps := make([]rune, psLength)
-        for i := range ps {
-            ps[i] = rand.Int31n(126-33) + 33
-        }
-        *password = string(ps)
-    }
+	psLength := input_int("Enter the length: ")
+	if psLength > 0 {
+		ps := make([]rune, psLength)
+		for i := range ps {
+			ps[i] = rand.Int31n(126-33) + 33
+		}
+		*password = string(ps)
+	}
 }
 
 func listRecord(rec *Record) {
@@ -196,25 +196,25 @@ func listRecord(rec *Record) {
 
 /* Creates a new encrypted database */
 func createNewDatabase() {
-    fmt.Println("[Creating a new database]")
+	fmt.Println("[Creating a new database]")
 
-    db_name := input("Enter the database name: ")
-    if db_name == "" {
-        fmt.Println("The database name cannot be empty")
-        os.Exit(0)
-    }
+	db_name := input("Enter the database name: ")
+	if db_name == "" {
+		fmt.Println("The database name cannot be empty")
+		os.Exit(0)
+	}
 
-    db_key_plain, err := createNewPassword()
-    if err != nil {
-        fmt.Println(err)
-        os.Exit(0)
-    }
-    db_key := getDerivedPassword(&db_key_plain)
+	db_key_plain, err := createNewPassword()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(0)
+	}
+	db_key := getDerivedPassword(&db_key_plain)
 
-    db_path := filepath.Join(getDatabaseFolder(), db_name)
-    init_rec := &Categories{} // A dummy record. Must be to init the database
-    test_rec, _ := json.Marshal(init_rec)
-    encrypt(&test_rec, &db_path, db_key)
+	db_path := filepath.Join(getDatabaseFolder(), db_name)
+	init_rec := &Categories{} // A dummy record. Must be to init the database
+	test_rec, _ := json.Marshal(init_rec)
+	encrypt(&test_rec, &db_path, db_key)
 }
 
 /* Return marshalled database */
@@ -233,12 +233,12 @@ func unmarshalDatabase(db []byte) *[]Categories {
 
 /* Getting the location of the folder with the databases */
 func getDatabaseFolder() string {
-    uDir, _ := os.UserHomeDir()
-    fPath := filepath.Join(uDir, ".nanopm")
-    if err := os.MkdirAll(fPath, 0700); err != nil {
-        log.Fatal(err)
-    }
-    return fPath
+	uDir, _ := os.UserHomeDir()
+	fPath := filepath.Join(uDir, ".nspm")
+	if err := os.MkdirAll(fPath, 0700); err != nil {
+		log.Fatal(err)
+	}
+	return fPath
 }
 
 /* Return full path to the selected database */

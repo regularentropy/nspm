@@ -29,7 +29,7 @@ type Categories struct {
 
 func main() {
 	newDB := flag.Bool("n", false, "Create a new database")
-	argPath := flag.String("f", "", "Pipe the database into nanopm")
+	argPath := flag.String("f", "", "Pipe the database into nspm")
 	flag.Parse()
 
 	var dbName, dbPath string
