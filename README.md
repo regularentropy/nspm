@@ -18,7 +18,7 @@ nanopm is a secure, cross-platform command line password manager written in Go.
 ![image](https://github.com/regularenthropy/nanopm/assets/89523758/ace53eee-a396-4009-8eb8-1731be01e072)
 
 # 🛠️ Installation:
-You can download Nanopm from the releases page on Github or compile it manually. To compile it manually, follow these steps:
+You can download nanopm from the releases page on Github or compile it manually. To compile it manually, follow these steps:
 ```
 Linux:  
     sudo make install
@@ -31,7 +31,7 @@ Windows:
 
 - By default, nanopm creates a `.nanopm` folder in the `$HOME` directory to hold all databases (except those passed as an argument).
 
-- If no databases are found, Nanopm will prompt you to pass the `-n` argument to initialize a new database.
+- If no databases are found, nanopm will prompt you to pass the `-n` argument to initialize a new database.
 
 2. There are two different ways to select a database in nanopm:
    - Run nanopm with the `-f` flag and pass a database path as an argument.
