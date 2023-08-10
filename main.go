@@ -28,34 +28,35 @@ type Categories struct {
 }
 
 func main() {
-	var db_name string
-	var db_path string
-	new_db := flag.Bool("n", false, "Create new database")
-	arg_path := flag.String("f", "", "Pipe database into nanopm")
+	newDB := flag.Bool("n", false, "Create a new database")
+	argPath := flag.String("f", "", "Pipe the database into nanopm")
 	flag.Parse()
 
-	if *new_db {
+	var dbName, dbPath string
+	var dbPass []byte
+
+	if *newDB {
 		createNewDatabase()
 		os.Exit(0)
 	}
 
-	if *arg_path != "" {
-		db_path = *arg_path
-		if _, err := os.Stat(db_path); err != nil {
-			fmt.Println("Database doesn't exist")
+	if *argPath != "" {
+		dbPath = *argPath
+		if _, err := os.Stat(dbPath); err != nil {
+			fmt.Println("The database doesn't exist.")
 			os.Exit(0)
 		}
-		db_name = filepath.Base(db_path)
-	}
-	if !*new_db && len(*arg_path) == 0 {
-		db_name, db_path = getDatabasePath(getDatabaseFolder())
-		if db_name == "" && db_path == "" {
-			fmt.Println("Databases weren't found. Consider creating new database via -n")
+		dbName = filepath.Base(dbPath)
+	} else {
+		dbName, dbPath = getDatabasePath(getDatabaseFolder())
+		if dbName == "" && dbPath == "" {
+			fmt.Println("Databases were not found. Consider creating a new database via -n")
 			os.Exit(0)
 		}
 	}
-	db_pass := getDerivedPassword(readDatabasePassword())
-	db := unmarshalDatabase(decrypt(*db_pass, db_path))
-	main_menu(db, &db_name, &db_path, db_pass)
+
+	dbPass = *getDerivedPassword(readDatabasePassword())
+	db := unmarshalDatabase(decrypt(dbPass, dbPath))
+	main_menu(db, &dbName, &dbPath, &dbPass)
 	clearScreen()
 }

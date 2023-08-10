@@ -43,7 +43,7 @@ func decrypt(key []byte, file string) []byte {
 	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
 	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
-		fmt.Println("\nPassword is invalid")
+		fmt.Println("\nThe password is invalid")
 		os.Exit(0)
 	}
 	return plaintext
@@ -60,7 +60,7 @@ func getDerivedPassword(key *[]byte) *[]byte {
 func createNewPassword() ([]byte, error) {
 	db_pass := []byte(input("Enter the password for the database: "))
 	if len(db_pass) < 5 {
-		return nil, errors.New("newpass: password must be at least 5 symbols")
+		return nil, errors.New("newpass: password must be at least 5 characters long")
 	}
 	return db_pass, nil
 }

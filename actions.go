@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 
 	"golang.org/x/term"
@@ -24,7 +26,7 @@ Why not throwing err ? Isn't simple + more code to handle
 /* ============= Actions used for category manipulation ============= */
 func createCategory(cats *[]Categories) {
 	var cat Categories
-	cat.CategoryName = input("Enter category title: ")
+	cat.CategoryName = input("Enter the category title: ")
 	*cats = append(*cats, cat)
 }
 
@@ -46,18 +48,18 @@ func renameCategory(cats *[]Categories) {
 	if u_index == -1 {
 		return
 	}
-	(*cats)[u_index].CategoryName = input("Enter new title: ")
+	(*cats)[u_index].CategoryName = input("Enter the new title: ")
 
 }
 
 func listCategories(cats *[]Categories) {
-	fmt.Println("Available categories: ")
-	for index, c := range *cats {
-		fmt.Printf("%d : %s\n", index, c.CategoryName)
-		for _, r := range c.Records {
-			fmt.Printf("\t%s\n", r.Title)
-		}
-	}
+    fmt.Println("Available categories:")
+    for index, c := range *cats {
+        fmt.Printf("%d : %s\n", index, c.CategoryName)
+        for _, r := range c.Records {
+            fmt.Printf("\t%s\n", r.Title)
+        }
+    }
 }
 
 func removeCategory(cats *[]Categories) {
@@ -88,10 +90,10 @@ func chooseCategoryIndex(cats *[]Categories) int {
 
 func createRecord(recs *[]Record) {
 	var rec Record
-	rec.Title = input("Enter site: ")
-	rec.Username = input("Enter username: ")
-	rec.Password = input("Enter password: ")
-	rec.Description = input("Enter description: ")
+	rec.Title = input("Enter the site name: ")
+	rec.Username = input("Enter the username: ")
+	rec.Password = input("Enter the password: ")
+	rec.Description = input("Enter the description: ")
 	*recs = append(*recs, rec)
 }
 
@@ -116,9 +118,9 @@ func listRecords(recs *[]Record) {
 	fmt.Println("Available records:")
 	for index, r := range *recs {
 		fmt.Printf("%d: %s\n", index, r.Title)
-		fmt.Printf("\tusername: %s\n", r.Username)
-		fmt.Printf("\tpassword: %s\n", r.Password)
-		fmt.Printf("\tdescription: %s\n", r.Description)
+		fmt.Printf("\tUsername: %s\n", r.Username)
+		fmt.Printf("\tPassword: %s\n", r.Password)
+		fmt.Printf("\tDescription: %s\n", r.Description)
 	}
 }
 
@@ -136,78 +138,55 @@ func chooseRecordIndex(recs *[]Record) int {
 
 /* Move the record between categories */
 func moveRecord(cats *[]Categories) {
-	var selected_rec Record
-	var destin_category *Categories
-	var source_category *Categories
-	var cat_index_to int
-	var cat_index_from int
-	var rec_index_from int
-	if len(*cats) == 0 {
-		return
-	}
 	clearScreen()
-	fmt.Print("Select category to move from\n\n")
-	cat_index_from = chooseCategoryIndex(cats)
-	if cat_index_from >= 0 && cat_index_from <= len(*cats) {
-		clearScreen()
-		fmt.Print("Select record to move\n\n")
-		rec_index_from = chooseRecordIndex(&(*cats)[cat_index_from].Records)
-		source_category = &(*cats)[cat_index_from]
-		if rec_index_from >= 0 && rec_index_from <= len(source_category.Records) {
-			selected_rec = source_category.Records[rec_index_from]
-		} else {
-			return
-		}
-	} else {
+    fmt.Println("Select the category to move from:")
+	catIndexFrom := chooseCategoryIndex(cats)
+	if catIndexFrom < 0 || catIndexFrom >= len(*cats) {
 		return
 	}
+
+	sourceCategory := &(*cats)[catIndexFrom]
 	clearScreen()
-	fmt.Print("Select destination category\n\n")
-	cat_index_to = chooseCategoryIndex(cats)
-	if cat_index_to >= 0 && cat_index_to <= len(*cats) {
-		destin_category = &(*cats)[cat_index_to]
-		destin_category.Records = append(destin_category.Records, selected_rec)
-		source_category.Records = append(source_category.Records[:rec_index_from], source_category.Records[rec_index_from+1:]...)
-	} else {
+    fmt.Println("Select the record to move:")
+	recIndexFrom := chooseRecordIndex(&sourceCategory.Records)
+	if recIndexFrom < 0 || recIndexFrom >= len(sourceCategory.Records) {
 		return
 	}
+
+	selectedRec := sourceCategory.Records[recIndexFrom]
+	clearScreen()
+    fmt.Println("Select the destination category:")
+	catIndexTo := chooseCategoryIndex(cats)
+	if catIndexTo < 0 || catIndexTo >= len(*cats) {
+		return
+	}
+
+	destinCategory := &(*cats)[catIndexTo]
+	destinCategory.Records = append(destinCategory.Records, selectedRec)
+	sourceCategory.Records = append(sourceCategory.Records[:recIndexFrom], sourceCategory.Records[recIndexFrom+1:]...)
 }
 
 /* ============= Actions for records editing ============= */
-func changeRecordTitle(title *string) {
-	fmt.Printf("Current title: %s\n", *title)
-	*title = input("Enter new title: ")
-}
 
-func changeRecordUsername(username *string) {
-	fmt.Printf("Current username: %s\n", *username)
-	*username = input("Enter new username: ")
-}
-
-func changeRecordPassword(password *string) {
-	fmt.Printf("Current password: %s\n", *password)
-	*password = input("Enter new password: ")
-}
-
-func changeRecordDescription(description *string) {
-	fmt.Printf("Current description: %s\n", *description)
-	*description = input("Enter new description: ")
+func changeRecordField(fieldName string, field *string, ) {
+    fmt.Printf("Current %s: %s\n", fieldName, *field)
+    *field = input(fmt.Sprintf("Enter new %s: ", fieldName))
 }
 
 func generateRecordPassword(password *string) {
-	ps_length := input_int("Enter length: ")
-	if ps_length > 0 {
-		ps := make([]rune, ps_length)
-		for i := range ps {
-			ps[i] = rand.Int31n(126-33) + 33
-		}
-		*password = string(ps)
-	}
+    psLength := input_int("Enter the length: ")
+    if psLength > 0 {
+        ps := make([]rune, psLength)
+        for i := range ps {
+            ps[i] = rand.Int31n(126-33) + 33
+        }
+        *password = string(ps)
+    }
 }
 
 func listRecord(rec *Record) {
 	clearScreen()
-	fmt.Printf("%s\n", rec.Title)
+	fmt.Println(rec.Title)
 	fmt.Printf("Username: %s\n", rec.Username)
 	fmt.Printf("Password: %s\n", rec.Password)
 	fmt.Printf("Description: %s\n", rec.Description)
@@ -217,24 +196,25 @@ func listRecord(rec *Record) {
 
 /* Creates a new encrypted database */
 func createNewDatabase() {
-	init_rec := &Categories{} /* A dummy record. Must be to init the database */
+    fmt.Println("[Creating a new database]")
 
-	fmt.Println("[Creating a new database]")
+    db_name := input("Enter the database name: ")
+    if db_name == "" {
+        fmt.Println("The database name cannot be empty")
+        os.Exit(0)
+    }
 
-	db_name := input("Database name: ")
-	if db_name == "" {
-		fmt.Println("Database title can't be empty")
-		os.Exit(0)
-	}
-	db_key_plain, err := createNewPassword()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(0)
-	}
-	db_key := getDerivedPassword(&db_key_plain)
-	db_path := filepath.Join(getDatabaseFolder(), db_name)
-	test_rec, _ := json.Marshal(init_rec)
-	encrypt(&test_rec, &db_path, db_key)
+    db_key_plain, err := createNewPassword()
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(0)
+    }
+    db_key := getDerivedPassword(&db_key_plain)
+
+    db_path := filepath.Join(getDatabaseFolder(), db_name)
+    init_rec := &Categories{} // A dummy record. Must be to init the database
+    test_rec, _ := json.Marshal(init_rec)
+    encrypt(&test_rec, &db_path, db_key)
 }
 
 /* Return marshalled database */
@@ -253,33 +233,33 @@ func unmarshalDatabase(db []byte) *[]Categories {
 
 /* Getting the location of the folder with the databases */
 func getDatabaseFolder() string {
-	u_dir, _ := os.UserHomeDir()
-	fpath := filepath.Join(u_dir, ".nanopm")
-	os.MkdirAll(fpath, 0700)
-	return fpath
+    uDir, _ := os.UserHomeDir()
+    fPath := filepath.Join(uDir, ".nanopm")
+    if err := os.MkdirAll(fPath, 0700); err != nil {
+        log.Fatal(err)
+    }
+    return fPath
 }
 
 /* Return full path to the selected database */
 func getDatabasePath(databaseFolder string) (string, string) {
-	var u_index int
 	files, _ := os.ReadDir(databaseFolder)
-	if len(files) > 0 {
-		for {
-			fmt.Println("Select database to open")
-			for index, file := range files {
-				fmt.Printf("%d : %s\n", index, file.Name())
-			}
-			u_index = input_int(": ")
-			if u_index > len(files) || u_index < 0 {
-				fmt.Println("Database doesn't exist")
-			} else {
-				break
-			}
-		}
-		filepath := filepath.Join(databaseFolder, files[u_index].Name())
-		return files[u_index].Name(), filepath
+	if len(files) == 0 {
+		return "", ""
 	}
-	return "", ""
+
+	for {
+		fmt.Println("Select a database to open:")
+		for index, file := range files {
+			fmt.Printf("%d : %s\n", index, file.Name())
+		}
+		uIndex := input_int(": ")
+		if uIndex >= 0 && uIndex < len(files) {
+			filepath := filepath.Join(databaseFolder, files[uIndex].Name())
+			return files[uIndex].Name(), filepath
+		}
+		fmt.Println("Database doesn't exist")
+	}
 }
 
 /* ============= Misc actions ============= */
@@ -287,16 +267,17 @@ func getDatabasePath(databaseFolder string) (string, string) {
 /* Replacement of the default input function. Allows entering more than one word */
 func input(text string) string {
 	fmt.Print(text)
-	inputReader := bufio.NewReader(os.Stdin)
-	uInput, _ := inputReader.ReadString('\n')
-	return strings.TrimSpace(uInput)
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	return strings.TrimSpace(input)
 }
 
-/* Replacement for the default int input function. Checks if the user didn't enter anything and returns -1 in that case */
 func input_int(text string) int {
-	var num int
 	fmt.Print(text)
-	_, err := fmt.Scanf("%d", &num)
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	input = strings.TrimSpace(input)
+	num, err := strconv.Atoi(input)
 	if err != nil {
 		return -1
 	}
@@ -305,7 +286,7 @@ func input_int(text string) int {
 
 /* Function responsible for entering a password when opening a database */
 func readDatabasePassword() *[]byte {
-	fmt.Printf("Enter password: ")
+	fmt.Print("Enter the password: ")
 	password, _ := term.ReadPassword(int(os.Stdin.Fd()))
 	return &password
 }

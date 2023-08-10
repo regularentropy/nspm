@@ -9,14 +9,14 @@ func main_menu(db *[]Categories, db_name *string, db_path *string, db_key *[]byt
 		fmt.Printf("nanopm v%d.%d.%d\n", major, minor, patch)
 		fmt.Printf("Editing [%s]\n", *db_name)
 		fmt.Printf(
-		"1.Create new category\n"+
-		"2.Edit category\n"+
-		"3.Rename category\n"+
-		"4.List categories\n"+
-		"5.Move records\n"+
-		"6.Remove category\n"+
-		"7.Change database password\n"+
-		"8.Save and exit\n")
+			"1.Create new category\n" +
+				"2.Edit category\n" +
+				"3.Rename category\n" +
+				"4.List categories\n" +
+				"5.Move records\n" +
+				"6.Remove category\n" +
+				"7.Change database password\n" +
+				"8.Save and exit\n")
 		u_choice := input_int(": ")
 		switch u_choice {
 		case 1:
@@ -49,11 +49,11 @@ func category_menu(cat *Categories) {
 		clearScreen()
 		fmt.Printf("[Editing '%s']\n", cat.CategoryName)
 		fmt.Printf(
-		"1.Add new record\n"+
-		"2.Edit record\n"+
-		"3.Remove record\n"+
-		"4.List records\n"+
-		"5.To main menu\n")
+			"1.Add new record\n" +
+				"2.Edit record\n" +
+				"3.Remove record\n" +
+				"4.List records\n" +
+				"5.To main menu\n")
 		u_choice := input_int(": ")
 		switch u_choice {
 		case 1:
@@ -88,13 +88,13 @@ func record_menu(rec *Record) {
 		u_choice := input_int(": ")
 		switch u_choice {
 		case 1:
-			changeRecordTitle(&rec.Title)
+			changeRecordField("title", &rec.Title)
 		case 2:
-			changeRecordUsername(&rec.Username)
+			changeRecordField("username", &rec.Username)
 		case 3:
-			changeRecordPassword(&rec.Password)
+			changeRecordField("password", &rec.Password)
 		case 4:
-			changeRecordDescription(&rec.Description)
+			changeRecordField("description", &rec.Title)
 		case 5:
 			generateRecordPassword(&rec.Password)
 		case 6:
