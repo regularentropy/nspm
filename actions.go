@@ -18,9 +18,9 @@ import (
 
 /*
 NOTICE:
-If function returns -1 or nothing, it means that something went wrong inside it
-If function returns different values, it means that it works as expected
-Why not throwing err ? Isn't simple + more code to handle
+If the function returns -1 or nothing, it means that something went wrong inside it.
+If the function returns a different value, it means that it works as expected.
+Why not throw an error? It's simpler and requires less code to handle.
 */
 
 /* ============= Actions used for category manipulation ============= */
@@ -49,7 +49,6 @@ func renameCategory(cats *[]Categories) {
 		return
 	}
 	(*cats)[u_index].CategoryName = input("Enter the new title: ")
-
 }
 
 func listCategories(cats *[]Categories) {
