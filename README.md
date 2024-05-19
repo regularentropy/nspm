@@ -41,7 +41,7 @@ Windows:
 
 # 👤 Authors:
 
-regularenthropy - main developer  
+regularentropy - main developer  
 Contributors are welcome!
 
 # ✅ TODO
