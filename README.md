@@ -46,7 +46,7 @@ Contributors are welcome!
 # ✅ TODO
 - [X] Add Windows support
 - [X] Refactor codebase to look better
-- [ ] Create a better name
+- [X] Create a better name
 
 License:
 --------
