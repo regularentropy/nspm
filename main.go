@@ -22,7 +22,7 @@ type Record struct {
 	Description string `json:"Description"`
 }
 
-type Categories struct {
+type Category struct {
 	CategoryName string   `json:"Category_Name"`
 	Records      []Record `json:"Record"`
 }
@@ -57,6 +57,6 @@ func main() {
 
 	dbPass = *getDerivedPassword(readDatabasePassword())
 	db := unmarshalDatabase(decrypt(dbPass, dbPath))
-	main_menu(db, &dbName, &dbPath, &dbPass)
+	mainMenu(db, &dbName, &dbPath, &dbPass)
 	clearScreen()
 }

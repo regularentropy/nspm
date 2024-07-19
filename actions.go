@@ -24,145 +24,145 @@ Why not throw an error? It's simpler and requires less code to handle.
 */
 
 /* ============= Actions used for category manipulation ============= */
-func createCategory(cats *[]Categories) {
-	var cat Categories
-	cat.CategoryName = input("Enter the category title: ")
-	*cats = append(*cats, cat)
+func createCategory(categories *[]Category) {
+	var category Category
+	category.CategoryName = input("Enter the category title: ")
+	*categories = append(*categories, category)
 }
 
-func editCategory(cats *[]Categories) {
+func editCategory(categories *[]Category) {
 	clearScreen()
-	cat_index := chooseCategoryIndex(cats)
-	if cat_index >= 0 && cat_index <= len(*cats) {
-		category_menu(&(*cats)[cat_index])
+	categoryIndex := chooseCategoryIndex(categories)
+	if categoryIndex >= 0 && categoryIndex < len(*categories) {
+		categoryMenu(&(*categories)[categoryIndex])
 	}
 }
 
-func renameCategory(cats *[]Categories) {
-	if len(*cats) == 0 {
+func renameCategory(categories *[]Category) {
+	if len(*categories) == 0 {
 		return
 	}
 	clearScreen()
-	listCategories(cats)
-	u_index := input_int(": ")
-	if u_index == -1 {
+	listCategories(categories)
+	userIndex := inputInt(": ")
+	if userIndex == -1 {
 		return
 	}
-	(*cats)[u_index].CategoryName = input("Enter the new title: ")
+	(*categories)[userIndex].CategoryName = input("Enter the new title: ")
 }
 
-func listCategories(cats *[]Categories) {
+func listCategories(categories *[]Category) {
 	fmt.Println("Available categories:")
-	for index, c := range *cats {
-		fmt.Printf("%d : %s\n", index, c.CategoryName)
-		for _, r := range c.Records {
-			fmt.Printf("\t%s\n", r.Title)
+	for index, category := range *categories {
+		fmt.Printf("%d : %s\n", index, category.CategoryName)
+		for _, record := range category.Records {
+			fmt.Printf("\t%s\n", record.Title)
 		}
 	}
 }
 
-func removeCategory(cats *[]Categories) {
-	if len(*cats) == 0 {
+func removeCategory(categories *[]Category) {
+	if len(*categories) == 0 {
 		return
 	}
 	clearScreen()
-	c_cat := chooseCategoryIndex(cats)
-	if c_cat == -1 {
+	categoryIndex := chooseCategoryIndex(categories)
+	if categoryIndex == -1 {
 		return
 	}
-	*cats = append((*cats)[:c_cat], (*cats)[c_cat+1:]...)
+	*categories = append((*categories)[:categoryIndex], (*categories)[categoryIndex+1:]...)
 }
 
-func chooseCategoryIndex(cats *[]Categories) int {
-	if len(*cats) == 0 {
+func chooseCategoryIndex(categories *[]Category) int {
+	if len(*categories) == 0 {
 		return -1
 	}
-	listCategories(cats)
-	u_index := input_int(": ")
-	if u_index == -1 {
+	listCategories(categories)
+	userIndex := inputInt(": ")
+	if userIndex == -1 {
 		return -1
 	}
-	return u_index
+	return userIndex
 }
 
 /* ============= Actions used for record manipulation ============= */
 
-func createRecord(recs *[]Record) {
-	var rec Record
-	rec.Title = input("Enter the site name: ")
-	rec.Username = input("Enter the username: ")
-	rec.Password = input("Enter the password: ")
-	rec.Description = input("Enter the description: ")
-	*recs = append(*recs, rec)
+func createRecord(records *[]Record) {
+	var record Record
+	record.Title = input("Enter the site name: ")
+	record.Username = input("Enter the username: ")
+	record.Password = input("Enter the password: ")
+	record.Description = input("Enter the description: ")
+	*records = append(*records, record)
 }
 
-func editRecord(recs *[]Record) {
+func editRecord(records *[]Record) {
 	clearScreen()
-	rec_index := chooseRecordIndex(recs)
-	if rec_index >= 0 && rec_index <= len(*recs) {
-		record_menu(&(*recs)[rec_index])
+	recordIndex := chooseRecordIndex(records)
+	if recordIndex >= 0 && recordIndex < len(*records) {
+		recordMenu(&(*records)[recordIndex])
 	}
 }
 
-func removeRecord(recs *[]Record) {
+func removeRecord(records *[]Record) {
 	clearScreen()
-	c_rec := chooseRecordIndex(recs)
-	if c_rec == -1 {
+	recordIndex := chooseRecordIndex(records)
+	if recordIndex == -1 {
 		return
 	}
-	*recs = append((*recs)[:c_rec], (*recs)[c_rec+1:]...)
+	*records = append((*records)[:recordIndex], (*records)[recordIndex+1:]...)
 }
 
-func listRecords(recs *[]Record) {
+func listRecords(records *[]Record) {
 	fmt.Println("Available records:")
-	for index, r := range *recs {
-		fmt.Printf("%d: %s\n", index, r.Title)
-		fmt.Printf("\tUsername: %s\n", r.Username)
-		fmt.Printf("\tPassword: %s\n", r.Password)
-		fmt.Printf("\tDescription: %s\n", r.Description)
+	for index, record := range *records {
+		fmt.Printf("%d: %s\n", index, record.Title)
+		fmt.Printf("\tUsername: %s\n", record.Username)
+		fmt.Printf("\tPassword: %s\n", record.Password)
+		fmt.Printf("\tDescription: %s\n", record.Description)
 	}
 }
 
-func chooseRecordIndex(recs *[]Record) int {
-	if len(*recs) == 0 {
+func chooseRecordIndex(records *[]Record) int {
+	if len(*records) == 0 {
 		return -1
 	}
-	listRecords(recs)
-	u_index := input_int(": ")
-	if u_index == -1 {
+	listRecords(records)
+	userIndex := inputInt(": ")
+	if userIndex == -1 {
 		return -1
 	}
-	return u_index
+	return userIndex
 }
 
 /* Move the record between categories */
-func moveRecord(cats *[]Categories) {
+func moveRecord(categories *[]Category) {
 	clearScreen()
 	fmt.Println("Select the category to move from:")
-	catIndexFrom := chooseCategoryIndex(cats)
-	if catIndexFrom < 0 || catIndexFrom >= len(*cats) {
+	categoryIndexFrom := chooseCategoryIndex(categories)
+	if categoryIndexFrom < 0 || categoryIndexFrom >= len(*categories) {
 		return
 	}
 
-	sourceCategory := &(*cats)[catIndexFrom]
+	sourceCategory := &(*categories)[categoryIndexFrom]
 	clearScreen()
 	fmt.Println("Select the record to move:")
-	recIndexFrom := chooseRecordIndex(&sourceCategory.Records)
-	if recIndexFrom < 0 || recIndexFrom >= len(sourceCategory.Records) {
+	recordIndexFrom := chooseRecordIndex(&sourceCategory.Records)
+	if recordIndexFrom < 0 || recordIndexFrom >= len(sourceCategory.Records) {
 		return
 	}
 
-	selectedRec := sourceCategory.Records[recIndexFrom]
+	selectedRecord := sourceCategory.Records[recordIndexFrom]
 	clearScreen()
 	fmt.Println("Select the destination category:")
-	catIndexTo := chooseCategoryIndex(cats)
-	if catIndexTo < 0 || catIndexTo >= len(*cats) {
+	categoryIndexTo := chooseCategoryIndex(categories)
+	if categoryIndexTo < 0 || categoryIndexTo >= len(*categories) {
 		return
 	}
 
-	destinCategory := &(*cats)[catIndexTo]
-	destinCategory.Records = append(destinCategory.Records, selectedRec)
-	sourceCategory.Records = append(sourceCategory.Records[:recIndexFrom], sourceCategory.Records[recIndexFrom+1:]...)
+	destinationCategory := &(*categories)[categoryIndexTo]
+	destinationCategory.Records = append(destinationCategory.Records, selectedRecord)
+	sourceCategory.Records = append(sourceCategory.Records[:recordIndexFrom], sourceCategory.Records[recordIndexFrom+1:]...)
 }
 
 /* ============= Actions for records editing ============= */
@@ -173,22 +173,22 @@ func changeRecordField(fieldName string, field *string) {
 }
 
 func generateRecordPassword(password *string) {
-	psLength := input_int("Enter the length: ")
-	if psLength > 0 {
-		ps := make([]rune, psLength)
-		for i := range ps {
-			ps[i] = rand.Int31n(126-33) + 33
+	passwordLength := inputInt("Enter the length: ")
+	if passwordLength > 0 {
+		passwordRunes := make([]rune, passwordLength)
+		for i := range passwordRunes {
+			passwordRunes[i] = rand.Int31n(126-33) + 33
 		}
-		*password = string(ps)
+		*password = string(passwordRunes)
 	}
 }
 
-func listRecord(rec *Record) {
+func displayRecord(record *Record) {
 	clearScreen()
-	fmt.Println(rec.Title)
-	fmt.Printf("Username: %s\n", rec.Username)
-	fmt.Printf("Password: %s\n", rec.Password)
-	fmt.Printf("Description: %s\n", rec.Description)
+	fmt.Println(record.Title)
+	fmt.Printf("Username: %s\n", record.Username)
+	fmt.Printf("Password: %s\n", record.Password)
+	fmt.Printf("Description: %s\n", record.Description)
 }
 
 /* ============= Actions responsible for manipulation with the database ============= */
@@ -197,47 +197,46 @@ func listRecord(rec *Record) {
 func createNewDatabase() {
 	fmt.Println("[Creating a new database]")
 
-	db_name := input("Enter the database name: ")
-	if db_name == "" {
+	databaseName := input("Enter the database name: ")
+	if databaseName == "" {
 		fmt.Println("The database name cannot be empty")
 		os.Exit(0)
 	}
 
-	db_key_plain, err := createNewPassword()
+	databaseKeyPlain, err := createNewPassword()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(0)
 	}
-	db_key := getDerivedPassword(&db_key_plain)
+	databaseKey := getDerivedPassword(&databaseKeyPlain)
 
-	db_path := filepath.Join(getDatabaseFolder(), db_name)
-	init_rec := &Categories{} // A dummy record. Must be to init the database
-	test_rec, _ := json.Marshal(init_rec)
-	encrypt(&test_rec, &db_path, db_key)
+	databasePath := filepath.Join(getDatabaseFolder(), databaseName)
+	initRec := &Category{} // A dummy record to initialize the database
+	testRec, _ := json.Marshal(initRec)
+	encrypt(&testRec, &databasePath, databaseKey)
 }
 
-/* Return marshalled database */
-func marshalDatabase(cats *[]Categories) *[]byte {
-	var m_db []byte
-	m_db, _ = json.Marshal(*cats)
-	return &m_db
+/* Return marshaled database */
+func marshalDatabase(categories *[]Category) *[]byte {
+	marshaledDatabase, _ := json.Marshal(*categories)
+	return &marshaledDatabase
 }
 
-/* Return unmarshalled database  */
-func unmarshalDatabase(db []byte) *[]Categories {
-	var u_db []Categories
-	json.Unmarshal(db, &u_db)
-	return &u_db
+/* Return unmarshaled database  */
+func unmarshalDatabase(database []byte) *[]Category {
+	var unmarshaledDatabase []Category
+	json.Unmarshal(database, &unmarshaledDatabase)
+	return &unmarshaledDatabase
 }
 
 /* Getting the location of the folder with the databases */
 func getDatabaseFolder() string {
-	uDir, _ := os.UserHomeDir()
-	fPath := filepath.Join(uDir, ".nspm")
-	if err := os.MkdirAll(fPath, 0700); err != nil {
+	userDir, _ := os.UserHomeDir()
+	folderPath := filepath.Join(userDir, ".nspm")
+	if err := os.MkdirAll(folderPath, 0700); err != nil {
 		log.Fatal(err)
 	}
-	return fPath
+	return folderPath
 }
 
 /* Return full path to the selected database */
@@ -252,10 +251,10 @@ func getDatabasePath(databaseFolder string) (string, string) {
 		for index, file := range files {
 			fmt.Printf("%d : %s\n", index, file.Name())
 		}
-		uIndex := input_int(": ")
-		if uIndex >= 0 && uIndex < len(files) {
-			filepath := filepath.Join(databaseFolder, files[uIndex].Name())
-			return files[uIndex].Name(), filepath
+		userIndex := inputInt(": ")
+		if userIndex >= 0 && userIndex < len(files) {
+			filePath := filepath.Join(databaseFolder, files[userIndex].Name())
+			return files[userIndex].Name(), filePath
 		}
 		fmt.Println("Database doesn't exist")
 	}
@@ -264,15 +263,15 @@ func getDatabasePath(databaseFolder string) (string, string) {
 /* ============= Misc actions ============= */
 
 /* Replacement of the default input function. Allows entering more than one word */
-func input(text string) string {
-	fmt.Print(text)
+func input(prompt string) string {
+	fmt.Print(prompt)
 	reader := bufio.NewReader(os.Stdin)
 	input, _ := reader.ReadString('\n')
 	return strings.TrimSpace(input)
 }
 
-func input_int(text string) int {
-	fmt.Print(text)
+func inputInt(prompt string) int {
+	fmt.Print(prompt)
 	reader := bufio.NewReader(os.Stdin)
 	input, _ := reader.ReadString('\n')
 	input = strings.TrimSpace(input)

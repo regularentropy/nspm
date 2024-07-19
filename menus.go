@@ -2,23 +2,23 @@ package main
 
 import "fmt"
 
-func main_menu(db *[]Categories, db_name *string, db_path *string, db_key *[]byte) {
-	in_menu := true
-	for in_menu {
+func mainMenu(db *[]Category, dbName *string, dbPath *string, dbKey *[]byte) {
+	inMenu := true
+	for inMenu {
 		clearScreen()
 		fmt.Printf("nspm v%d.%d.%d\n", major, minor, patch)
-		fmt.Printf("Editing [%s]\n", *db_name)
+		fmt.Printf("Editing [%s]\n", *dbName)
 		fmt.Printf(
-			"1.Create new category\n" +
-				"2.Edit category\n" +
-				"3.Rename category\n" +
-				"4.List categories\n" +
-				"5.Move records\n" +
-				"6.Remove category\n" +
-				"7.Change database password\n" +
-				"8.Save and exit\n")
-		u_choice := input_int(": ")
-		switch u_choice {
+			"1. Create new category\n" +
+				"2. Edit category\n" +
+				"3. Rename category\n" +
+				"4. List categories\n" +
+				"5. Move records\n" +
+				"6. Remove category\n" +
+				"7. Change database password\n" +
+				"8. Save and exit\n")
+		userChoice := inputInt(": ")
+		switch userChoice {
 		case 1:
 			createCategory(db)
 		case 2:
@@ -34,75 +34,75 @@ func main_menu(db *[]Categories, db_name *string, db_path *string, db_key *[]byt
 		case 6:
 			removeCategory(db)
 		case 7:
-			changeDatabasePassword(db_key)
+			changeDatabasePassword(dbKey)
 		case 8:
-			encrypt(marshalDatabase(db), db_path, db_key)
-			in_menu = false
+			encrypt(marshalDatabase(db), dbPath, dbKey)
+			inMenu = false
 		}
 	}
 }
 
 /* Menu for editing the records */
-func category_menu(cat *Categories) {
-	in_menu := true
-	for in_menu {
+func categoryMenu(category *Category) {
+	inMenu := true
+	for inMenu {
 		clearScreen()
-		fmt.Printf("[Editing '%s']\n", cat.CategoryName)
+		fmt.Printf("[Editing '%s']\n", category.CategoryName)
 		fmt.Printf(
-			"1.Add new record\n" +
-				"2.Edit record\n" +
-				"3.Remove record\n" +
-				"4.List records\n" +
-				"5.To main menu\n")
-		u_choice := input_int(": ")
-		switch u_choice {
+			"1. Add new record\n" +
+				"2. Edit record\n" +
+				"3. Remove record\n" +
+				"4. List records\n" +
+				"5. To main menu\n")
+		userChoice := inputInt(": ")
+		switch userChoice {
 		case 1:
-			createRecord(&cat.Records)
+			createRecord(&category.Records)
 		case 2:
-			editRecord(&cat.Records)
+			editRecord(&category.Records)
 		case 3:
-			removeRecord(&cat.Records)
+			removeRecord(&category.Records)
 		case 4:
 			clearScreen()
-			listRecords(&cat.Records)
+			listRecords(&category.Records)
 			enterToContinue()
 		case 5:
-			in_menu = false
+			inMenu = false
 		}
 	}
 }
 
-func record_menu(rec *Record) {
-	in_menu := true
-	for in_menu {
+func recordMenu(record *Record) {
+	inMenu := true
+	for inMenu {
 		clearScreen()
-		fmt.Printf("Editing %s\n", rec.Title)
+		fmt.Printf("Editing %s\n", record.Title)
 		fmt.Printf(
-			"1.Change title\n" +
-				"2.Change username\n" +
-				"3.Change password\n" +
-				"4.Change description\n" +
-				"5.Generate password\n" +
-				"6.List current record\n" +
-				"7.To record menu\n")
-		u_choice := input_int(": ")
-		switch u_choice {
+			"1. Change title\n" +
+				"2. Change username\n" +
+				"3. Change password\n" +
+				"4. Change description\n" +
+				"5. Generate password\n" +
+				"6. List current record\n" +
+				"7. To record menu\n")
+		userChoice := inputInt(": ")
+		switch userChoice {
 		case 1:
-			changeRecordField("title", &rec.Title)
+			changeRecordField("title", &record.Title)
 		case 2:
-			changeRecordField("username", &rec.Username)
+			changeRecordField("username", &record.Username)
 		case 3:
-			changeRecordField("password", &rec.Password)
+			changeRecordField("password", &record.Password)
 		case 4:
-			changeRecordField("description", &rec.Title)
+			changeRecordField("description", &record.Description)
 		case 5:
-			generateRecordPassword(&rec.Password)
+			generateRecordPassword(&record.Password)
 		case 6:
 			clearScreen()
-			listRecord(rec)
+			displayRecord(record)
 			enterToContinue()
 		case 7:
-			in_menu = false
+			inMenu = false
 		}
 	}
 }
