@@ -11,7 +11,7 @@ import (
 const (
 	major = 1
 	minor = 1
-	patch = 0
+	patch = 1
 )
 
 /* Example of the record in the database */
