@@ -3,7 +3,7 @@ module nspm
 go 1.17
 
 require (
-	golang.org/x/crypto v0.29.0
+	golang.org/x/crypto v0.30.0
 	golang.org/x/term v0.27.0
 )
 
